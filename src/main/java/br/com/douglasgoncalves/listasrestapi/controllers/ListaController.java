@@ -53,11 +53,12 @@ public class ListaController {
 	@Autowired
 	private ItemConvert itemConvert;
 
-	// Cadastra
+	//(C) Cadastra
 	@PostMapping
+	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(summary = "Cadastar uma nova Lista", description = "EndPoint usado para Cadastrar uma nova Lista")
 	public ResponseEntity<ListaOutput> cadastra(
-			@Parameter(description = "Representação do ListaInput") @Valid @RequestBody ListaInput listaInput,
+			@Parameter(description = "Representação da Lista") @Valid @RequestBody ListaInput listaInput,
 			UriComponentsBuilder uriBuild) {
 		ListaEntity listaNovo = listaConvert.inputParaEntity(listaInput);
 		ListaEntity listaSalvo = listaService.cadastrar(listaNovo);
@@ -65,32 +66,8 @@ public class ListaController {
 
 		return ResponseEntity.created(uri).body(listaConvert.entityParaOutput(listaSalvo));
 	}
-
-	// Lista Todos
-	@GetMapping
-	@Operation(summary = "Lista Todas as Lista", description = "EndPoint usado para Listar todas as Listas")
-	public List<ListaOutput> ListaTodos() {
-		return listaConvert.listaEntityParaListaOutput(listaService.listaTodos());
-	}
-
-	// Busca Pelo id
-	@Operation(summary = "Busca Lista pelo Id", description = "EndPoint usado para fazer a busca de uma Lista pelo Id")
-	@GetMapping("/{id}")
-	public ListaEntity BuscaPeloId(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long id) {
-		return listaService.buscaPeloId(id);
-	}
-
-	// Deleta
-	@Operation(summary = "Deleta Lista pelo Id", description = "EndPoint usado para deletar Uma Lista pelo Id")
-	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deletaPeloId(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long id) {
-		ListaEntity lista = listaService.buscaPeloId(id);
-		itemService.deletaTodosItensDaLista(lista);
-		listaService.deletaPeloId(id);
-	}
-
-	// Atualiza
+	
+	//(D) Atualiza 
 	@PutMapping("/{id}")
 	@Operation(summary = "Atualiza Lista com os novos dados", description = "EndPoint usado para Atualizar a Lista com base nos dados passados")
 	public ListaOutput atualiza(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long id,
@@ -100,37 +77,62 @@ public class ListaController {
 		return listaConvert.entityParaOutput(listaService.atualiza(listaEntity));
 	}
 
-	// Lista Todos os itens da Lista
-	@GetMapping("{id}/itens")
-	@Operation(summary = "Lista todos os Itens de uma lista", description = "EndPoint usado para Listar todos os Itens de uma lista")
-	public List<ItemOutput> ListaItens(@PathVariable Long id) {
-		ListaEntity lista = listaService.buscaPeloId(id);
-		List<ItemEntity> itens = itemService.listaItensPelaLista(lista);
-
-		return itemConvert.listaEntityParaListaOutput(itens);
+	//(E) Lista Todos 
+	@GetMapping
+	@Operation(summary = "Lista Todas as Lista", description = "EndPoint usado para Listar todas as Listas")
+	public List<ListaOutput> ListaTodos() {
+		return listaConvert.listaEntityParaListaOutput(listaService.listaTodos());
 	}
 
-	// Marcar Item
+	//(F) Busca Pelo id 
+	@Operation(summary = "Busca Lista pelo Id", description = "EndPoint usado para fazer a busca de uma Lista pelo Id")
+	@GetMapping("/{id}")
+	public ListaOutput BuscaPeloId(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long id) {
+		return listaConvert.entityParaOutput(listaService.buscaPeloId(id));
+	}
+
+	//(G) Deleta 
+	@Operation(summary = "Deleta Lista pelo Id", description = "EndPoint usado para deletar Uma Lista pelo Id")
+	@DeleteMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deletaPeloId(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long id) {
+		ListaEntity lista = listaService.buscaPeloId(id);
+		itemService.deletaTodosItensDaLista(lista);
+		listaService.deletaPeloId(id);
+	}
+
+
+	//(L) Marcar Item 
 	@PutMapping("/{listaId}/marcar-item-como-concluido/{itenId}")
 	@Operation(summary = "Marca Item da Lista como concluido", description = "EndPoint usado para marcar um item como concluido")
 	public ItemOutput marcarItem(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long listaId,
-			@Parameter(description = "Id do Item", example = "1") @PathVariable Long itenId,
-			@RequestBody ItemInput itemInput) {
+			@Parameter(description = "Id do Item", example = "1") @PathVariable Long itenId) {
 		ItemEntity item = itemService.buscaItemPeloListaIdItemId(listaId, itenId);
 		itemService.marcarComoConcluido(item);
 
 		return itemConvert.entityParaOutput(item);
 	}
 
-	// Desmarcar Item
+	//(M) Desmarcar Item 
 	@PutMapping("/{listaId}/desmarcar-item-concluido/{itenId}")
 	@Operation(summary = "Desmarca Item concluido da Lista", description = "EndPoint usado para desmarcar um item concluido")
 	public ItemOutput desmarcarItem(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long listaId,
-			@Parameter(description = "Id do Item", example = "1") @PathVariable Long itenId,
-			@RequestBody ItemInput itemInput) {
+			@Parameter(description = "Id do Item", example = "1") @PathVariable Long itenId) {
 		ItemEntity item = itemService.buscaItemPeloListaIdItemId(listaId, itenId);
 		itemService.desmarcarConcluido(item);
 
 		return itemConvert.entityParaOutput(item);
 	}
+	
+	//(N) Lista Todos os itens da Lista 
+	@GetMapping("{id}/itens")
+	@Operation(summary = "Lista todos os Itens de uma lista", description = "EndPoint usado para Listar todos os Itens de uma lista")
+	public List<ItemOutput> ListaItensDaLista(@Parameter(description = "Id da Lista", example = "1") @PathVariable Long id) {
+		ListaEntity lista = listaService.buscaPeloId(id);
+		List<ItemEntity> itens = itemService.listaItensPelaLista(lista);
+
+		return itemConvert.listaEntityParaListaOutput(itens);
+	}
+
+
 }

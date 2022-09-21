@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ItemOutput {
-	Long id;
-	String titulo;
-	Boolean concluido;
+	private Long id;
+	private String titulo;
+	private Boolean concluido;
 }

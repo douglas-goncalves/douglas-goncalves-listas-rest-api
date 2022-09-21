@@ -13,5 +13,5 @@ import lombok.Setter;
 public class ListaInput {
 	@NotBlank(message = "O campo Titulo é obrigatório!")
 	@Length(message = "O campo Titulo deve ter no máximo 100 caracteres!", max = 100)
-	String titulo;
+	private String titulo;
 }

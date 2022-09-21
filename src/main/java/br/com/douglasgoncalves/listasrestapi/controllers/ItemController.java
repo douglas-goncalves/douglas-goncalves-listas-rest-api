@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.douglasgoncalves.listasrestapi.configs.ControllerConfig;
 import br.com.douglasgoncalves.listasrestapi.converts.ItemConvert;
 import br.com.douglasgoncalves.listasrestapi.dtos.inputs.ItemInput;
+import br.com.douglasgoncalves.listasrestapi.dtos.outputs.ItemComListaOutput;
 import br.com.douglasgoncalves.listasrestapi.dtos.outputs.ItemOutput;
 import br.com.douglasgoncalves.listasrestapi.entities.ItemEntity;
 import br.com.douglasgoncalves.listasrestapi.entities.ListaEntity;
@@ -45,12 +46,13 @@ public class ItemController {
 	@Autowired
 	private ListaService listaService;
 
-	// Cadastra
+	//(I) Cadastra 
 	@Operation(summary = "Cadastar um novo Item", description = "EndPoint usado para Cadastrar um novo Item")
 	@PostMapping
+	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResponseEntity<ItemOutput> cadastra(
 		@Parameter(description = "Representação do Item")	@Valid @RequestBody ItemInput itemInput, UriComponentsBuilder uriBuild) {
-		ListaEntity lista = listaService.buscaPeloId(itemInput.getLista_id());
+		ListaEntity lista = listaService.buscaPeloId(itemInput.getListaId());
 		ItemEntity itemNovo = itemConvert.inputParaEntity(itemInput, lista);
 		ItemEntity itemSalvo = itemService.cadastra(itemNovo);
 		URI uri = uriBuild.path(ControllerConfig.PRE_URL + "/itens").buildAndExpand(itemSalvo.getId()).toUri();
@@ -58,36 +60,24 @@ public class ItemController {
 		return ResponseEntity.created(uri).body(itemConvert.entityParaOutput(itemSalvo));
 	}
 
-	// Lista Todos
-	@Operation(summary = "Lista Todos os Item", description = "EndPoint usado para Listar todos os Itens")
-	@GetMapping
-	public List<ItemOutput> ListaTodos() {
-		return itemConvert.listaEntityParaListaOutput(itemService.listaTodos());
-	}
-
-	// Busca Pelo id
-	@Operation(summary = "Busca Item pelo Id", description = "EndPoint usado para fazer a busca de um Item pelo Id")
-	@GetMapping("/{id}")
-	public ItemEntity BuscaPeloId(@Parameter(description = "Id do Item", example = "1") @PathVariable Long id) {
-		return itemService.buscaPeloId(id);
-	}
-
-	// Deleta
-	@Operation(summary = "Deleta Item pelo Id", description = "EndPoint usado para deletar um Item pelo Id")
-	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deletaPeloId(@Parameter(description = "Id do Item", example = "1") @PathVariable Long id) {
-		itemService.deletaPeloId(id);
-	}
-
-	// atualiza
+	//(J) atualiza 
 	@PutMapping("/{id}")
 	@Operation(summary = "Atualiza Item com os novos dados", description = "EndPoint usado para Atualizar o Item com os dados passados")
 	public ItemOutput atualiza(@Parameter(description = "Id do Item", example = "1") @PathVariable Long id,
 			@RequestBody ItemInput itemInput) {
 		ItemEntity itemEncontrado = itemService.buscaPeloId(id);
-		itemConvert.copiarInputParaEntity(itemInput, itemEncontrado);
+		ListaEntity listaEncontrada = listaService.buscaPeloId(itemInput.getListaId());
+		itemConvert.copiarInputParaEntity(itemInput,listaEncontrada ,itemEncontrado);
 		return itemConvert.entityParaOutput(itemService.atualiza(itemEncontrado));
+	}
+
+
+	//(K) Deleta 
+	@Operation(summary = "Deleta Item pelo Id", description = "EndPoint usado para deletar um Item pelo Id")
+	@DeleteMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deletaPeloId(@Parameter(description = "Id do Item", example = "1") @PathVariable Long id) {
+		itemService.deletaPeloId(id);
 	}
 
 }
