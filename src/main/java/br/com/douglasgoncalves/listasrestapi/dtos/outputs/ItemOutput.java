@@ -9,4 +9,5 @@ public class ItemOutput {
 	private Long id;
 	private String titulo;
 	private Boolean concluido;
+	private ListaOutput lista;
 }
