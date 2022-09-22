@@ -1,10 +1,10 @@
-package br.com.douglasgoncalves.listaapi;
+package br.com.douglasgoncalves.listasrestapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ListaApiApplicationTests {
+class ListasRestApiApplicationTests {
 
 	@Test
 	void contextLoads() {

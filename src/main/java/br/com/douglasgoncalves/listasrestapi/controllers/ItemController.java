@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.douglasgoncalves.listasrestapi.configs.ControllerConfig;
 import br.com.douglasgoncalves.listasrestapi.converts.ItemConvert;
 import br.com.douglasgoncalves.listasrestapi.dtos.inputs.ItemInput;
+import br.com.douglasgoncalves.listasrestapi.dtos.outputs.ItemComListaOutput;
 import br.com.douglasgoncalves.listasrestapi.dtos.outputs.ItemOutput;
 import br.com.douglasgoncalves.listasrestapi.entities.ItemEntity;
 import br.com.douglasgoncalves.listasrestapi.entities.ListaEntity;
@@ -47,25 +48,26 @@ public class ItemController {
 	@Operation(summary = "Cadastar um novo Item", description = "EndPoint usado para Cadastrar um novo Item")
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<ItemOutput> cadastra(
+	public ResponseEntity<ItemComListaOutput> cadastra(
 		@Parameter(description = "Representação do Item")	@Valid @RequestBody ItemInput itemInput, UriComponentsBuilder uriBuild) {
 		ListaEntity lista = listaService.buscaPeloId(itemInput.getListaId());
 		ItemEntity itemNovo = itemConvert.inputParaEntity(itemInput, lista);
+		
 		ItemEntity itemSalvo = itemService.cadastra(itemNovo);
 		URI uri = uriBuild.path(ControllerConfig.PRE_URL + "/itens").buildAndExpand(itemSalvo.getId()).toUri();
 
-		return ResponseEntity.created(uri).body(itemConvert.entityParaOutput(itemSalvo));
+		return ResponseEntity.created(uri).body(itemConvert.entityParaComListaOutput(itemSalvo));
 	}
 
 	//(J) atualiza 
 	@PutMapping("/{id}")
 	@Operation(summary = "Atualiza Item com os novos dados", description = "EndPoint usado para Atualizar o Item com os dados passados")
-	public ItemOutput atualiza(@Parameter(description = "Id do Item", example = "1") @PathVariable Long id,
+	public ItemComListaOutput atualiza(@Parameter(description = "Id do Item", example = "1") @PathVariable Long id,
 			@RequestBody ItemInput itemInput) {
 		ItemEntity itemEncontrado = itemService.buscaPeloId(id);
 		ListaEntity listaEncontrada = listaService.buscaPeloId(itemInput.getListaId());
 		itemConvert.copiarInputParaEntity(itemInput,listaEncontrada ,itemEncontrado);
-		return itemConvert.entityParaOutput(itemService.atualiza(itemEncontrado));
+		return itemConvert.entityParaComListaOutput(itemService.atualiza(itemEncontrado));
 	}
 
 
