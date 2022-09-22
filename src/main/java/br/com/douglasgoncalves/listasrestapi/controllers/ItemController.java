@@ -1,7 +1,6 @@
 package br.com.douglasgoncalves.listasrestapi.controllers;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,7 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.douglasgoncalves.listasrestapi.configs.ControllerConfig;
 import br.com.douglasgoncalves.listasrestapi.converts.ItemConvert;
 import br.com.douglasgoncalves.listasrestapi.dtos.inputs.ItemInput;
-import br.com.douglasgoncalves.listasrestapi.dtos.outputs.ItemComListaOutput;
 import br.com.douglasgoncalves.listasrestapi.dtos.outputs.ItemOutput;
 import br.com.douglasgoncalves.listasrestapi.entities.ItemEntity;
 import br.com.douglasgoncalves.listasrestapi.entities.ListaEntity;

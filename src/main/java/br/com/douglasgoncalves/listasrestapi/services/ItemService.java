@@ -11,13 +11,12 @@ import br.com.douglasgoncalves.listasrestapi.entities.ItemEntity;
 import br.com.douglasgoncalves.listasrestapi.entities.ListaEntity;
 import br.com.douglasgoncalves.listasrestapi.exceptions.NotFoundBussinessException;
 import br.com.douglasgoncalves.listasrestapi.repositories.ItemRepository;
-import io.swagger.v3.oas.annotations.Parameter;
 
 @Service
 public class ItemService {
 	
 	@Autowired
-	ItemRepository itemRepository;
+	private ItemRepository itemRepository;
 	
 	@Transactional
 	public ItemEntity cadastra(ItemEntity itemEntity) {

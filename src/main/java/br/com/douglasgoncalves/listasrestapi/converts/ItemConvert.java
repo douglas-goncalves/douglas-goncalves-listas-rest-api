@@ -17,7 +17,7 @@ import br.com.douglasgoncalves.listasrestapi.entities.ListaEntity;
 public class ItemConvert {
 
 	@Autowired
-	ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 
 	// InputParaEntity
 	public ItemEntity inputParaEntity(ItemInput itemInput, ListaEntity lista) {

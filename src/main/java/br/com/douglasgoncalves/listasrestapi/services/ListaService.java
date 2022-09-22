@@ -15,7 +15,7 @@ import br.com.douglasgoncalves.listasrestapi.repositories.ListaRepository;
 public class ListaService {
 	
 	@Autowired
-	ListaRepository listaRepository;
+	private ListaRepository listaRepository;
 	
 	@Transactional
 	public ListaEntity cadastrar(ListaEntity listaEntity) {
