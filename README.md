@@ -31,13 +31,15 @@
   </ul>
 </div>  
 
-<div>Importado o projeto:</div>
+<div>Importado e testando o projeto:</div>
 <div>
 <ol>
  <li> Clonar Repositório</li>
  <li> Abrir o SpringTools ou Eclipse.</li>
  <li> Importar o projeto.</li>
- <li> Este projeto usa a dependêcia Lombok, então será necesario configurar o Lombok em seu framework caso necessário.</li>
-    <https://projectlombok.org/setup/eclipse></li>
+ <li> Este projeto usa a dependêcia Lombok, então será necesario configurar o Lombok em seu framework caso necessário. 
+  <a href="https://projectlombok.org/setup/">Site do projeto Lombok<a></li>
+ <li>Levante o projeto</li>
+ <li>Acesse o Swagger pelo navegador: <a href="http://localhost:8080/swagger-ui/index.html#/">link</a></li>
  </ol>   
  </div>   
