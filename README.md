@@ -31,7 +31,7 @@
   </ul>
 </div>  
 
-<div>Importado e levantar o projeto:</div>
+<div>Importado o projeto:</div>
 <div>
 <ol>
  <li> Clonar Repositório</li>
